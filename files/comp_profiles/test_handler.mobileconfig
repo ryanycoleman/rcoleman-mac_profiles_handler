@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>FullScreen</key>
+			<true/>
+			<key>IsRemovable</key>
+			<true/>
+			<key>Label</key>
+			<string>test</string>
+			<key>PayloadDescription</key>
+			<string>Configures Web Clip</string>
+			<key>PayloadDisplayName</key>
+			<string>Web Clip (test)</string>
+			<key>PayloadIdentifier</key>
+			<string>test_handler.</string>
+			<key>PayloadOrganization</key>
+			<string></string>
+			<key>PayloadType</key>
+			<string>com.apple.webClip.managed</string>
+			<key>PayloadUUID</key>
+			<string>84079B66-F2CB-451D-AE59-6468195F7B08</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>Precomposed</key>
+			<false/>
+			<key>URL</key>
+			<string>http://www.puppetlabs.com</string>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Profile description.</string>
+	<key>PayloadDisplayName</key>
+	<string>PL Test</string>
+	<key>PayloadIdentifier</key>
+	<string>test_handler</string>
+	<key>PayloadOrganization</key>
+	<string></string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>C591A962-89D5-45EE-9E9C-CD685B3634B2</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
