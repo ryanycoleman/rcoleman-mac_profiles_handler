@@ -8,19 +8,22 @@ The profile_manager resource type is the back-end type that interacts with /usr/
 A basic fact is also provided to list installed profiles.
 
 ## Usage
-mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
-  ensure  => present,
-  file_source => 'puppet:///modules/mymodule/com.puppetlabs.myprofile.mobileconfig',
+
+<pre>
+mac_profiles_handler::manage { 'com.puppetlabs.myprofile':  
+  ensure  => present,  
+  file_source => 'puppet:///modules/mymodule/com.puppetlabs.myprofile.mobileconfig',  
 }
+</pre>
 
 You must pass the profilers identifier as your namevar, ensure accepts present or absent and file_source behaves the same way source behaves for file.
 
 ## To-Do
-Improve provider parsing.
-Handle more types of configuration profiles.
-The fact should create a fact for each profile, bonus points for using system_profiler.
-Improve documentation when author isn't presenting the next morning.
+Improve provider parsing.  
+Handle more types of configuration profiles.  
+The fact should create a fact for each profile, bonus points for using system_profiler.  
+Improve documentation when author isn't presenting the next morning.  
 
 ## Contributing
-Please do!
+Please do!  
 Create issues in GitHub, Make Pull Requests, Have Fun!
