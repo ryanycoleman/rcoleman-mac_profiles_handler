@@ -1,2 +1,4 @@
-mac_profiles_handler::manage { 'test_handler.mobileconfig': }
-mac_profiles_handler::manage { 'test2.mobileconfig': }
+mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
+  ensure  => present,
+  file_source => 'puppet:///modules/mymodule/com.puppetlabs.myprofile.mobileconfig',
+}

@@ -1,24 +1,26 @@
 # mac_profiles_handler module for Puppet
 
 ## Description
-Puppet Module for managing the lion-computer-profiles-handler service @ code.google.com
-This module manages the profile_handler service written by folks at Google and replaces 
-the need for a profile manager server on your network. It provides a way to easily 
-distribute mobileconfig profiles to an agent system where they'll be handled by the profile_handler service.
+This module provides two resource types for interacting with OS X configuration profiles.
 
+The profile_manager resource type is the back-end type that interacts with /usr/bin/profiles for creating, destroying and verifying a resource type. The mac_profiles_handler::manage resource type is user-facing and handles the management of the actual files.
+
+A basic fact is also provided to list installed profiles.
 
 ## Usage
-Assuming one has the file mypolicy.mobileconfig in the files/comp_profiles directory of their module:
+mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
+  ensure  => present,
+  file_source => 'puppet:///modules/mymodule/com.puppetlabs.myprofile.mobileconfig',
+}
 
-  mac::profile_handler::manage { 'mypolicy.mobileconfig':
-    state      => 'enabled',
-    filesource => 'puppet:///modules/mac_profiles_handler/comp_profiles/mypolicy.mobileconfig',
-  }
+You must pass the profilers identifier as your namevar, ensure accepts present or absent and file_source behaves the same way source behaves for file.
 
-This usage will deploy the profiles_handler script and service if not present along with the
-directories they need to funtion. It will then deploy mypolicy.mobileconfig to /usr/local/comp_profiles
-where the service expects to find mobileconfig profiles and will manage them.
+## To-Do
+Improve provider parsing.
+Handle more types of configuration profiles.
+The fact should create a fact for each profile, bonus points for using system_profiler.
+Improve documentation when author isn't presenting the next morning.
 
-Mobileconfig profiles used with this module need to end their identifier string with _handler
-
-More information can be found at the projects [website](http://code.google.com/p/lion-computer-profiles-handler/).
+## Contributing
+Please do!
+Create issues in GitHub, Make Pull Requests, Have Fun!
