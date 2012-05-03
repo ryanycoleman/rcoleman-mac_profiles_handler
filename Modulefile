@@ -1,10 +1,10 @@
 name    'rcoleman-mac_profiles_handler'
-version '0.0.1'
-source 'http://code.google.com/p/lion-computer-profiles-handler/'
+version '0.1.0'
+source 'https://github.com/rcoleman/rcoleman-mac_profiles_handler'
 author 'rcoleman'
-license 'GNU GPL v2'
-summary 'Puppet Module for managing the lion-computer-profiles-handler service @ code.google.com'
-description 'This module manages the profile_handler service written by folks at Google and replaces the need for a profile manager server on your network. It provides a way to easily distribute mobileconfig profiles to an agent system where they\'ll be handled by the profile_handler service.'
+license 'Apache'
+summary 'Puppet Module for managing OS X Configuration Profiles'
+description 'This module provides two resource types for managing configuration profiles.'
 project_page ''
 
 ## Add dependencies, if any:
