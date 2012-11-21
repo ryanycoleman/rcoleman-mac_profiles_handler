@@ -23,7 +23,17 @@ define mac_profiles_handler::manage(
     ensure => file,
     source => $file_source,
   }
-
+  
+  if $ensure=='present'{
+      exec { "remove-profile":
+          subscribe => File["/var/lib/puppet/mobileconfigs/${name}"],
+          before => Profile_manager[$name],
+          refreshonly => true,
+          command => "/usr/bin/profiles -R -p ${name}",
+          onlyif => "/usr/bin/profiles -P | /usr/bin/grep -q ${name}",
+        }
+    }
+    
   profile_manager { $name:
     ensure  => $ensure,
     profile => "/var/lib/puppet/mobileconfigs/${name}",
