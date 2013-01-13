@@ -25,7 +25,7 @@ define mac_profiles_handler::manage(
   }
   
   if $ensure=='present'{
-      exec { "remove-profile":
+      exec { "remove-profile-${name}":
           subscribe => File["/var/lib/puppet/mobileconfigs/${name}"],
           before => Profile_manager[$name],
           refreshonly => true,
