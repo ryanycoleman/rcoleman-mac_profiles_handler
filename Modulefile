@@ -1,5 +1,5 @@
 name    'rcoleman-mac_profiles_handler'
-version '0.1.0'
+version '0.2.0'
 source 'https://github.com/rcoleman/rcoleman-mac_profiles_handler'
 author 'rcoleman'
 license 'Apache'
