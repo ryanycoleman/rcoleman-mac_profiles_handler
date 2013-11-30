@@ -16,6 +16,16 @@ mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
 }
 </pre>
 
+You can use an ERB template instead of a mobileconfig:  
+<pre>
+mac_profiles_handler::manage { 'com.puppetlabs.myprofile':  
+  ensure  => present,  
+  file_source => template('mymodule/com.puppetlabs.myprofile.erb'),  
+  type => 'template',  
+}
+</pre>
+
+
 You must pass the profilers identifier as your namevar, ensure accepts present or absent and file_source behaves the same way source behaves for file.
 
 ## To-Do
