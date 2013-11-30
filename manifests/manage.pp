@@ -2,7 +2,7 @@
 define mac_profiles_handler::manage(
   $file_source,
   $ensure,
-  $type,
+  $type = 'mobileconfig',
 ) {
 
   if $::operatingsystem != 'Darwin' {
