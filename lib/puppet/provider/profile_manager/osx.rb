@@ -16,7 +16,7 @@ Puppet::Type.type(:profile_manager).provide :osx do
   end
 
   def exists?
-    `/usr/bin/profiles -P | /usr/bin/grep '#{resource[:name]}'`
+    `/usr/bin/profiles -P | /usr/bin/awk '{ print $4 }' | /usr/bin/grep -x '#{resource[:name]}'`
     if $? == 0
       return true
     else
