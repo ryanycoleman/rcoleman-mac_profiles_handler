@@ -15,20 +15,20 @@ define mac_profiles_handler::manage(
     mode   => '0700',
   }
 
-  if ! defined(File['/var/lib/puppet/mobileconfigs']) {
-    file { '/var/lib/puppet/mobileconfigs':
+  if ! defined(File["${::puppet_vardir}/mobileconfigs"]) {
+    file { "${::puppet_vardir}/mobileconfigs":
       ensure => directory,
     }
   }
   case $type {
     'template': {
-      file { "/var/lib/puppet/mobileconfigs/${name}":
+      file { "${::puppet_vardir}/mobileconfigs/${name}":
         ensure  => file,
         content => $file_source,
       }
     }
     default: {
-      file { "/var/lib/puppet/mobileconfigs/${name}":
+      file { "${::puppet_vardir}/mobileconfigs/${name}":
         ensure => file,
         source => $file_source,
       }
@@ -37,7 +37,7 @@ define mac_profiles_handler::manage(
 
   if $ensure=='present'{
     exec { "remove-profile-${name}":
-      subscribe   => File["/var/lib/puppet/mobileconfigs/${name}"],
+      subscribe   => File["${::puppet_vardir}/mobileconfigs/${name}"],
       before      => Profile_manager[$name],
       refreshonly => true,
       command     => "/usr/bin/profiles -R -p ${name}",
@@ -47,8 +47,8 @@ define mac_profiles_handler::manage(
 
   profile_manager { $name:
     ensure  => $ensure,
-    profile => "/var/lib/puppet/mobileconfigs/${name}",
-    require => File["/var/lib/puppet/mobileconfigs/${name}"],
+    profile => "${::puppet_vardir}/mobileconfigs/${name}",
+    require => File["${::puppet_vardir}/mobileconfigs/${name}"],
   }
 
 
