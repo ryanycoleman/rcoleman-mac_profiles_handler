@@ -28,6 +28,10 @@ mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
 
 You must pass the profilers identifier as your namevar, ensure accepts present or absent and file_source behaves the same way source behaves for file.
 
+## Dependencies
+
+* [puppetlabs/stdlib >= 2.3.1](https://forge.puppetlabs.com/puppetlabs/stdlib)
+
 ## To-Do
 Improve provider parsing.  
 Handle more types of configuration profiles.  
