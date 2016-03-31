@@ -8,4 +8,4 @@ description 'This module provides two resource types for managing configuration 
 project_page 'https://github.com/ryanycoleman/rcoleman-mac_profiles_handler'
 
 ## Add dependencies, if any:
-# dependency 'username/name', '>= 1.2.0'
+dependency 'puppetlabs/stdlib', '>= 2.3.1'
