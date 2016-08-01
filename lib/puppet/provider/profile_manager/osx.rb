@@ -5,19 +5,18 @@ Puppet::Type.type(:profile_manager).provide :osx do
 
   defaultfor :operatingsystem => :darwin
 
-  commands :profiles => "/usr/bin/profiles"
+  commands :profilescmd => '/usr/bin/profiles'
 
   def create
-    profiles('-I', '-F', resource[:profile])
+    profilescmd('-I', '-F', resource[:profile])
   end
 
   def destroy
-    profiles('-R', '-p', resource[:name])
+    profilescmd('-R', '-p', resource[:name])
   end
 
   def exists?
-    `/usr/bin/profiles -P | /usr/bin/awk '{ print $4 }' | /usr/bin/grep -x '#{resource[:name]}'`
-    if $? == 0
+    if Facter.value(:profiles).include? resource[:name]
       return true
     else
       return false
