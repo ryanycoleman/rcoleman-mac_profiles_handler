@@ -12,6 +12,7 @@ Facter.add(:profiles) do
 		end
 	end
 
-	profiles.join(',')
+	profiles
+
   end
 end
