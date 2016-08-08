@@ -4,7 +4,7 @@ Facter.add(:profiles) do
 	profiles = []
 
 	if Facter.value(:os)['release']['major'].to_i >= 12
-		output = %x{/usr/bin/profiles -P}
+		output = Facter::Util::Resolution.exec('/usr/bin/profiles -P')
 
 		output.each_line do |line|
 			if line.include? 'profileIdentifier'
