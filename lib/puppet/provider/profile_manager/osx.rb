@@ -16,10 +16,6 @@ Puppet::Type.type(:profile_manager).provide :osx do
   end
 
   def exists?
-    if Facter.value(:profiles).include? resource[:name]
-      return true
-    else
-      return false
-    end
+    return Facter.value(:profiles).include? resource[:name]
   end
 end
