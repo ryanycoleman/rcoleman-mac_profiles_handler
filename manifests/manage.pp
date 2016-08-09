@@ -35,20 +35,11 @@ define mac_profiles_handler::manage(
     }
   }
 
-  if $ensure=='present'{
-    exec { "remove-profile-${name}":
-      subscribe   => File["${::puppet_vardir}/mobileconfigs/${name}"],
-      before      => Profile_manager[$name],
-      refreshonly => true,
-      command     => "/usr/bin/profiles -R -p ${name}",
-      onlyif      => "/usr/bin/profiles -P | /usr/bin/grep -q ${name}",
-    }
-  }
-
   profile_manager { $name:
-    ensure  => $ensure,
-    profile => "${::puppet_vardir}/mobileconfigs/${name}",
-    require => File["${::puppet_vardir}/mobileconfigs/${name}"],
+    ensure     => $ensure,
+    profile    => "${::puppet_vardir}/mobileconfigs/${name}",
+    require    => File["${::puppet_vardir}/mobileconfigs/${name}"],
+    subscribe  => File["${::puppet_vardir}/mobileconfigs/${name}"],
   }
 
 

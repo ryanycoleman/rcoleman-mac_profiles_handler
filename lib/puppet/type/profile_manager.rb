@@ -18,6 +18,10 @@ Puppet::Type.newtype(:profile_manager) do
 
   ensurable
 
+  def refresh
+    provider.create
+  end
+
   newparam(:name, :namevar => true)
   newparam(:profile)
 end
