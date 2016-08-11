@@ -1,5 +1,4 @@
 Puppet::Type.newtype(:profile_manager) do
-
   @doc = <<-EOT
     Manage Apple Configuration Profiles
     http://help.apple.com/profilemanager/mac/10.7/#apd88330954-6FA0-4568-A88E-7F6828E763A7
@@ -22,6 +21,6 @@ Puppet::Type.newtype(:profile_manager) do
     provider.create
   end
 
-  newparam(:name, :namevar => true)
+  newparam(:name, namevar: true)
   newparam(:profile)
 end
