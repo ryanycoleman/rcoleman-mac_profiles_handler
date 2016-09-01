@@ -5,7 +5,7 @@ define mac_profiles_handler::manage(
   $type = 'mobileconfig',
 ) {
 
-  if $::operatingsystem != 'Darwin' {
+  if $facts['os']['name'] != 'Darwin' {
     fail('The mobileconfig::manage resource type is only supported on OS X')
   }
 
@@ -15,20 +15,20 @@ define mac_profiles_handler::manage(
     mode   => '0700',
   }
 
-  if ! defined(File["${::puppet_vardir}/mobileconfigs"]) {
-    file { "${::puppet_vardir}/mobileconfigs":
+  if ! defined(File["${facts['puppet_vardir']}/mobileconfigs"]) {
+    file { "${facts['puppet_vardir']}/mobileconfigs":
       ensure => directory,
     }
   }
   case $type {
     'template': {
-      file { "${::puppet_vardir}/mobileconfigs/${name}":
+      file { "${facts['puppet_vardir']}/mobileconfigs/${name}":
         ensure  => file,
         content => $file_source,
       }
     }
     default: {
-      file { "${::puppet_vardir}/mobileconfigs/${name}":
+      file { "${facts['puppet_vardir']}/mobileconfigs/${name}":
         ensure => file,
         source => $file_source,
       }
@@ -36,10 +36,10 @@ define mac_profiles_handler::manage(
   }
 
   profile_manager { $name:
-    ensure     => $ensure,
-    profile    => "${::puppet_vardir}/mobileconfigs/${name}",
-    require    => File["${::puppet_vardir}/mobileconfigs/${name}"],
-    subscribe  => File["${::puppet_vardir}/mobileconfigs/${name}"],
+    ensure    => $ensure,
+    profile   => "${facts['puppet_vardir']}/mobileconfigs/${name}",
+    require   => File["${facts['puppet_vardir']}/mobileconfigs/${name}"],
+    subscribe => File["${facts['puppet_vardir']}/mobileconfigs/${name}"],
   }
 
 
