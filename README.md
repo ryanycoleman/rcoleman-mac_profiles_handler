@@ -1,7 +1,7 @@
 # mac_profiles_handler module for Puppet
 
 ## Description
-This module provides two resource types for interacting with OS X configuration profiles.
+This module provides two resource types for interacting with macOS configuration profiles.
 
 The profile_manager resource type is the back-end type that interacts with /usr/bin/profiles for creating, destroying and verifying a resource type. The mac_profiles_handler::manage resource type is user-facing and handles the management of the actual files.
 

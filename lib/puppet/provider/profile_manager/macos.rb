@@ -1,7 +1,7 @@
 require 'puppet/util/plist'
 
-Puppet::Type.type(:profile_manager).provide :osx do
-  desc 'Provides management of mobileconfig profiles on OS X.'
+Puppet::Type.type(:profile_manager).provide :macos do
+  desc 'Provides management of mobileconfig profiles on macOS.'
 
   confine operatingsystem: :darwin
 
@@ -19,14 +19,15 @@ Puppet::Type.type(:profile_manager).provide :osx do
   end
 
   def exists?
-    installed
-  end
-
-  def installed
     # if already installed, check if it is the right one.
     # if not installed, return false.
+    # if we are removing, don't care if it is the right one.
     if Facter.value(:profiles).include? resource[:name]
-      return current
+      if resource[:ensure] == :absent
+        return true
+      else
+        return current
+      end
     else
       return false
     end
