@@ -25,6 +25,13 @@ mac_profiles_handler::manage { 'com.puppetlabs.myprofile':
 }
 </pre>
 
+You can also ensure that a profile is absent by specifying just the identifier:
+<pre>
+mac_profiles_handler::manage { '00000000-0000-0000-A000-4A414D460003':
+  ensure => absent,
+}
+</pre>
+
 
 You must pass the profilers identifier as your namevar, ensure accepts present or absent and file_source behaves the same way source behaves for file.
 
