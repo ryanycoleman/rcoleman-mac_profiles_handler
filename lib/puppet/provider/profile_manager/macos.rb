@@ -1,4 +1,5 @@
 require 'puppet/util/plist'
+require 'tmpdir'
 
 Puppet::Type.type(:profile_manager).provide :macos do
   desc 'Provides management of mobileconfig profiles on macOS.'
@@ -60,18 +61,23 @@ Puppet::Type.type(:profile_manager).provide :macos do
   end
 
   def getinstalledstate
-    output = Puppet::Util::Execution.execute('/usr/sbin/system_profiler SPConfigurationProfileDataType -xml')
+    # profiles will only write to a nonexistant file, so we make a temp dir for it to write to.
+    path = Dir.mktmpdir + '/profiles.plist'
 
-    data = Puppet::Util::Plist.parse_plist(output)[0]['_items']
+    Puppet::Util::Execution.execute(['/usr/bin/profiles', '-C', '-o', path])
+
+    plist = Puppet::Util::Plist.read_plist_file(path)
+
+    data = plist['_computerlevel']
 
     unless data.empty?
-      for item in data[0]['_items']
-        if item['spconfigprofile_profile_identifier'] == resource[:name]
+      for item in data
+        if item['ProfileIdentifier'] == resource[:name]
           return {
-            'identifier' => item['spconfigprofile_profile_identifier'],
-            'display_name' => item['_name'],
-            'uuid' => item['spconfigprofile_profile_uuid'],
-            'install_date' => DateTime.parse(item['spconfigprofile_install_date'].scan(/\(([^\)]+)\)/).last.first)
+            'identifier' => item['ProfileIdentifier'],
+            'display_name' => item['ProfileDisplayName'],
+            'uuid' => item['ProfileUUID'],
+            'install_date' => DateTime.parse(item['ProfileInstallDate'])
           }
         end
       end

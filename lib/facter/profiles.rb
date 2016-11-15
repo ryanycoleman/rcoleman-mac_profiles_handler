@@ -1,5 +1,6 @@
 require 'puppet/util/plist'
 require 'time'
+require 'tmpdir'
 
 Facter.add(:profiles) do
   confine kernel: 'Darwin'
@@ -8,31 +9,35 @@ Facter.add(:profiles) do
 
     if Facter.value(:os)['release']['major'].to_i >= 12
 
-      output = Facter::Util::Resolution.exec('/usr/sbin/system_profiler SPConfigurationProfileDataType -xml')
+      path = Dir.mktmpdir + '/profiles.plist'
 
-      data = Puppet::Util::Plist.parse_plist(output)[0]['_items']
+      # why????
+      Facter::Util::Resolution.exec(['/usr/bin/profiles', '-C', '-o', path].join(' '))
+
+      plist = Puppet::Util::Plist.read_plist_file(path)
+
+      data = plist['_computerlevel']
 
       unless data.empty?
-        for item in data[0]['_items']
-          profiles[item['spconfigprofile_profile_identifier']] = {
-            'display_name' => item['_name'],
-            'description' => item['spconfigprofile_description'],
-            'verification_state' => item['spconfigprofile_verification_state'],
-            'uuid' => item['spconfigprofile_profile_uuid'],
-            'organization' => item['spconfigprofile_organization'],
-            'install_date' => DateTime.parse(item['spconfigprofile_install_date'].scan(/\(([^\)]+)\)/).last.first),
+        for item in data
+          profiles[item['ProfileIdentifier']] = {
+            'display_name' => item['ProfileDisplayName'],
+            'description' => item['ProfileDescription'],
+            'verification_state' => item['ProfileVerificationState'],
+            'uuid' => item['ProfileUUID'],
+            'organization' => item['ProfileOrganization'],
+            'type' => item['ProfileType'],
+            'install_date' => DateTime.parse(item['ProfileInstallDate']),
             'payload' => []
           }
 
-          for pl in item['_items']
-            profiles[item['spconfigprofile_profile_identifier']]['payload'] << {
-              'name' => pl['_name'],
-              'display_name' => pl['spconfigprofile_payload_display_name'],
-              'identifier' => pl['spconfigprofile_payload_identifier'],
-              'uuid' => pl['spconfigprofile_payload_uuid'],
-              # commented out because this is returned in old ASCII plist format
-              # which cfpropertylist cannot handle, so the data is useless.
-              # 'data' => pl['spconfigprofile_payload_data'],
+          for pl in item['ProfileItems']
+            profiles[item['ProfileIdentifier']]['payload'] << {
+              'type' => pl['PayloadType'],
+              'identifier' => pl['PayloadIdentifier'],
+              'uuid' => pl['PayloadUUID'],
+              # commented out for now because its not super useful.
+              # 'content' => pl['PayloadContent'],
             }
           end
         end
