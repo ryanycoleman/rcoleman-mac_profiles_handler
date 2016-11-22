@@ -16,10 +16,8 @@ Facter.add(:profiles) do
 
       plist = Puppet::Util::Plist.read_plist_file(path)
 
-      data = plist['_computerlevel']
-
-      unless data.empty?
-        for item in data
+      if plist.key?('_computerlevel')
+        for item in plist['_computerlevel']
           profiles[item['ProfileIdentifier']] = {
             'display_name' => item['ProfileDisplayName'],
             'description' => item['ProfileDescription'],

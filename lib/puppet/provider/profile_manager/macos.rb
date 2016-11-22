@@ -68,10 +68,8 @@ Puppet::Type.type(:profile_manager).provide :macos do
 
     plist = Puppet::Util::Plist.read_plist_file(path)
 
-    data = plist['_computerlevel']
-
-    unless data.empty?
-      for item in data
+    if plist.key?('_computerlevel')
+      for item in plist['_computerlevel']
         if item['ProfileIdentifier'] == resource[:name]
           return {
             'identifier' => item['ProfileIdentifier'],
