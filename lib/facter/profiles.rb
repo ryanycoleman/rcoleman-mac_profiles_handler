@@ -1,10 +1,11 @@
-require 'puppet/util/plist'
-require 'time'
-require 'tmpdir'
-
 Facter.add(:profiles) do
   confine kernel: 'Darwin'
   setcode do
+    
+    require 'puppet/util/plist'
+    require 'time'
+    require 'tmpdir'
+
     profiles = {}
 
     if Facter.value(:os)['release']['major'].to_i >= 12
