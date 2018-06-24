@@ -1,56 +1,54 @@
 # manage mac profiles
 define mac_profiles_handler::manage(
-  $file_source,
-  $ensure,
+  $file_source = '',
+  $ensure = 'present',
   $type = 'mobileconfig',
 ) {
 
-  if $::operatingsystem != 'Darwin' {
-    fail('The mobileconfig::manage resource type is only supported on OS X')
+  if $facts['os']['name'] != 'Darwin' {
+    fail('The mobileconfig::manage resource type is only supported on macOS')
   }
 
-  File {
-    owner  => 'root',
-    group  => 'wheel',
-    mode   => '0700',
-  }
-
-  if ! defined(File['/var/lib/puppet/mobileconfigs']) {
-    file { '/var/lib/puppet/mobileconfigs':
-      ensure => directory,
-    }
-  }
-  case $type {
-    'template': {
-      file { "/var/lib/puppet/mobileconfigs/${name}":
-        ensure  => file,
-        content => $file_source,
+  case $ensure {
+    'absent': {
+      profile_manager { $name:
+        ensure    => $ensure,
       }
     }
     default: {
-      file { "/var/lib/puppet/mobileconfigs/${name}":
-        ensure => file,
-        source => $file_source,
+      File {
+        owner  => 'root',
+        group  => 'wheel',
+        mode   => '0700',
+      }
+
+      if ! defined(File["${facts['puppet_vardir']}/mobileconfigs"]) {
+        file { "${facts['puppet_vardir']}/mobileconfigs":
+          ensure => directory,
+        }
+      }
+      case $type {
+        'template': {
+          file { "${facts['puppet_vardir']}/mobileconfigs/${name}":
+            ensure  => file,
+            content => $file_source,
+          }
+        }
+        default: {
+          file { "${facts['puppet_vardir']}/mobileconfigs/${name}":
+            ensure => file,
+            source => $file_source,
+          }
+        }
+      }
+      profile_manager { $name:
+        ensure    => $ensure,
+        profile   => "${facts['puppet_vardir']}/mobileconfigs/${name}",
+        require   => File["${facts['puppet_vardir']}/mobileconfigs/${name}"],
+        subscribe => File["${facts['puppet_vardir']}/mobileconfigs/${name}"],
       }
     }
   }
-
-  if $ensure=='present'{
-    exec { "remove-profile-${name}":
-      subscribe   => File["/var/lib/puppet/mobileconfigs/${name}"],
-      before      => Profile_manager[$name],
-      refreshonly => true,
-      command     => "/usr/bin/profiles -R -p ${name}",
-      onlyif      => "/usr/bin/profiles -P | /usr/bin/grep -q ${name}",
-    }
-  }
-
-  profile_manager { $name:
-    ensure  => $ensure,
-    profile => "/var/lib/puppet/mobileconfigs/${name}",
-    require => File["/var/lib/puppet/mobileconfigs/${name}"],
-  }
-
 
 }
 
